@@ -1,6 +1,6 @@
 {
   "name": "@hostclube/hyper-linux-arm64",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Hyper native binary for linux-arm64",
   "repository": {
     "type": "git",

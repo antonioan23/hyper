@@ -1,6 +1,6 @@
 {
   "name": "@hostclube/hyper-linux-x64",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Hyper native binary for linux-x64",
   "repository": {
     "type": "git",
