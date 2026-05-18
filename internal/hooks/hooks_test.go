@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/shell"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/shell"
 	"github.com/stretchr/testify/require"
 )
 
@@ -188,20 +188,20 @@ func TestBuildEnv(t *testing.T) {
 		}
 	}
 
-	require.Equal(t, EventPreToolUse, envMap["CRUSH_EVENT"])
-	require.Equal(t, "bash", envMap["CRUSH_TOOL_NAME"])
-	require.Equal(t, "sess-1", envMap["CRUSH_SESSION_ID"])
-	require.Equal(t, "/work", envMap["CRUSH_CWD"])
-	require.Equal(t, "/project", envMap["CRUSH_PROJECT_DIR"])
-	require.Equal(t, "ls", envMap["CRUSH_TOOL_INPUT_COMMAND"])
-	require.Equal(t, "/tmp/f.txt", envMap["CRUSH_TOOL_INPUT_FILE_PATH"])
+	require.Equal(t, EventPreToolUse, envMap["HYPER_EVENT"])
+	require.Equal(t, "bash", envMap["HYPER_TOOL_NAME"])
+	require.Equal(t, "sess-1", envMap["HYPER_SESSION_ID"])
+	require.Equal(t, "/work", envMap["HYPER_CWD"])
+	require.Equal(t, "/project", envMap["HYPER_PROJECT_DIR"])
+	require.Equal(t, "ls", envMap["HYPER_TOOL_INPUT_COMMAND"])
+	require.Equal(t, "/tmp/f.txt", envMap["HYPER_TOOL_INPUT_FILE_PATH"])
 
-	// Shared Crush markers must be present so hook-authored scripts can
-	// detect they're running under Crush the same way bash-tool-invoked
+	// Shared Hyper markers must be present so hook-authored scripts can
+	// detect they're running under Hyper the same way bash-tool-invoked
 	// scripts can.
-	require.Equal(t, "1", envMap["CRUSH"])
-	require.Equal(t, "crush", envMap["AGENT"])
-	require.Equal(t, "crush", envMap["AI_AGENT"])
+	require.Equal(t, "1", envMap["HYPER"])
+	require.Equal(t, "hyper", envMap["AGENT"])
+	require.Equal(t, "hyper", envMap["AI_AGENT"])
 }
 
 func splitFirst(s, sep string) []string {
@@ -493,7 +493,7 @@ func TestRunnerParallelExecution(t *testing.T) {
 func TestRunnerEnvVarsPropagated(t *testing.T) {
 	t.Parallel()
 	hookCfg := config.HookConfig{
-		Command: `printf '{"decision":"allow","context":"%s"}' "$CRUSH_TOOL_NAME"`,
+		Command: `printf '{"decision":"allow","context":"%s"}' "$HYPER_TOOL_NAME"`,
 	}
 	r := NewRunner([]config.HookConfig{hookCfg}, t.TempDir(), t.TempDir())
 	result, err := r.Run(context.Background(), EventPreToolUse, "sess", "bash", `{}`)
@@ -538,7 +538,8 @@ func TestAggregationUpdatedInput(t *testing.T) {
 		require.Equal(t, DecisionAllow, agg.Decision)
 		// command overridden by second patch; keep preserved from first
 		// patch; timeout preserved from original input.
-		require.JSONEq(t,
+		require.JSONEq(
+			t,
 			`{"command":"second","keep":"me","timeout":60}`,
 			agg.UpdatedInput,
 		)
@@ -550,7 +551,8 @@ func TestAggregationUpdatedInput(t *testing.T) {
 			{Decision: DecisionAllow, UpdatedInput: `{"env":{"FOO":"bar"}}`},
 		}, `{"env":{"BAZ":"qux"},"command":"ls"}`)
 		// "env" is replaced entirely; "command" preserved.
-		require.JSONEq(t,
+		require.JSONEq(
+			t,
 			`{"env":{"FOO":"bar"},"command":"ls"}`,
 			agg.UpdatedInput,
 		)
@@ -678,7 +680,8 @@ func TestRunnerUpdatedInput(t *testing.T) {
 	result, err := r.Run(context.Background(), EventPreToolUse, "sess", "bash", `{"command":"echo original","timeout":60}`)
 	require.NoError(t, err)
 	require.Equal(t, DecisionAllow, result.Decision)
-	require.JSONEq(t,
+	require.JSONEq(
+		t,
 		`{"command":"echo rewritten","timeout":60}`,
 		result.UpdatedInput,
 	)
@@ -714,7 +717,7 @@ func TestParseStdoutClaudeCodeFormat(t *testing.T) {
 		require.Equal(t, DecisionNone, r.Decision)
 	})
 
-	t.Run("crush format still works", func(t *testing.T) {
+	t.Run("hyper format still works", func(t *testing.T) {
 		t.Parallel()
 		r := parseStdout(`{"decision":"allow","context":"hello"}`)
 		require.Equal(t, DecisionAllow, r.Decision)

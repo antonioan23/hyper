@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/ui/common"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 )
@@ -50,9 +50,9 @@ func (h *header) refresh() {
 	if !isHyper {
 		charm = " " + charm
 	}
-	name := "CRUSH"
+	name := "HYPER"
 	if isHyper {
-		name = "HYPERCRUSH"
+		name = "HYPERHYPER"
 	}
 	h.compactLogo = t.Header.Charm.Render(charm) + " " +
 		styles.ApplyBoldForegroundGrad(t.Header.LogoGradCanvas, name, t.Header.LogoGradFromColor, t.Header.LogoGradToColor) + " "
@@ -122,7 +122,8 @@ func (h *header) drawHeader(
 	b.WriteString(details)
 
 	view := uv.NewStyledString(
-		t.Header.Wrapper.Padding(0, rightPadding, 0, leftPadding).Render(b.String()))
+		t.Header.Wrapper.Padding(0, rightPadding, 0, leftPadding).Render(b.String()),
+	)
 	view.Draw(scr, area)
 }
 

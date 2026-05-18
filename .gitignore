@@ -45,12 +45,19 @@ Thumbs.db
 # Nix/direnv
 .direnv/
 
-**/.crush/**
+**/.hyper/**
 
-/crush
+/hyper
 /tmp/
 
 manpages/
-completions/crush.*sh
+completions/hyper.*sh
 .prettierignore
 .task
+
+# npm publish artifacts
+npm/bin/native/
+npm/.npmrc
+npm/platforms/**/bin/
+npm/platforms/**/.npmrc
+npm/node_modules/

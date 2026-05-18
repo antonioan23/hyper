@@ -9,9 +9,9 @@ import (
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/ui/list"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/dustin/go-humanize"
 	"github.com/rivo/uniseg"
@@ -184,7 +184,8 @@ func renderItem(t ListItemStyles, title string, info string, focused bool, width
 			// precisely via [ansi.AttrUnderline] and [ansi.AttrNoUnderline]
 			// which only affect the underline attribute without interfering
 			// with other style attributes.
-			parts = append(parts,
+			parts = append(
+				parts,
 				ansi.NewStyle().Underline(true).String(),
 				ansi.Cut(title, start, stop+1),
 				ansi.NewStyle().Underline(false).String(),

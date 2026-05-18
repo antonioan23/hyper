@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/diff"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/diff"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/filetracker"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/history"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 type MultiEditOperation struct {
@@ -110,7 +110,8 @@ func NewMultiEditTool(
 			text += getDiagnostics(params.FilePath, lspManager)
 			response.Content = text
 			return response, nil
-		})
+		},
+	)
 }
 
 func validateEdits(edits []MultiEditOperation) error {
@@ -266,9 +267,11 @@ func processMultiEditExistingFile(edit editContext, params MultiEditParams, call
 	modTime := fileInfo.ModTime().Truncate(time.Second)
 	if modTime.After(lastRead) {
 		return fantasy.NewTextErrorResponse(
-			fmt.Sprintf("file %s has been modified since it was last read (mod time: %s, last read: %s)",
+			fmt.Sprintf(
+				"file %s has been modified since it was last read (mod time: %s, last read: %s)",
 				params.FilePath, modTime.Format(time.RFC3339), lastRead.Format(time.RFC3339),
-			)), nil
+			),
+		), nil
 	}
 
 	// Read current file content

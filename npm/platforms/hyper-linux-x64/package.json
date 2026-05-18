@@ -1,0 +1,15 @@
+{
+  "name": "@hostclube/hyper-linux-x64",
+  "version": "0.1.2",
+  "description": "Hyper native binary for linux-x64",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charmbracelet/hyper.git",
+    "directory": "npm/platforms/hyper-linux-x64"
+  },
+  "license": "MIT",
+  "author": "Charm",
+  "os": ["linux"],
+  "cpu": ["x64"],
+  "files": ["bin/"]
+}

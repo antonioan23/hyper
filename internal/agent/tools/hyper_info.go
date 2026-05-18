@@ -8,20 +8,20 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/skills"
 )
 
-const CrushInfoToolName = "crush_info"
+const HyperInfoToolName = "hyper_info"
 
-//go:embed crush_info.md
-var crushInfoDescription string
+//go:embed hyper_info.md
+var hyperInfoDescription string
 
-type CrushInfoParams struct{}
+type HyperInfoParams struct{}
 
-func NewCrushInfoTool(
+func NewHyperInfoTool(
 	cfg *config.ConfigStore,
 	lspManager *lsp.Manager,
 	allSkills []*skills.Skill,
@@ -29,14 +29,15 @@ func NewCrushInfoTool(
 	skillTracker *skills.Tracker,
 ) fantasy.AgentTool {
 	return fantasy.NewAgentTool(
-		CrushInfoToolName,
-		crushInfoDescription,
-		func(ctx context.Context, _ CrushInfoParams, _ fantasy.ToolCall) (fantasy.ToolResponse, error) {
-			return fantasy.NewTextResponse(buildCrushInfo(cfg, lspManager, allSkills, activeSkills, skillTracker)), nil
-		})
+		HyperInfoToolName,
+		hyperInfoDescription,
+		func(ctx context.Context, _ HyperInfoParams, _ fantasy.ToolCall) (fantasy.ToolResponse, error) {
+			return fantasy.NewTextResponse(buildHyperInfo(cfg, lspManager, allSkills, activeSkills, skillTracker)), nil
+		},
+	)
 }
 
-func buildCrushInfo(cfg *config.ConfigStore, lspManager *lsp.Manager, allSkills []*skills.Skill, activeSkills []*skills.Skill, skillTracker *skills.Tracker) string {
+func buildHyperInfo(cfg *config.ConfigStore, lspManager *lsp.Manager, allSkills []*skills.Skill, activeSkills []*skills.Skill, skillTracker *skills.Tracker) string {
 	var b strings.Builder
 
 	writeConfigFiles(&b, cfg)

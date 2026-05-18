@@ -14,7 +14,7 @@ import (
 	"charm.land/fantasy"
 	md "github.com/JohannesKaufmann/html-to-markdown"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 const (
@@ -77,7 +77,8 @@ func NewFetchTool(permissions permission.Service, workingDir string, client *htt
 				return fantasy.ToolResponse{}, fmt.Errorf("session ID is required for creating a new file")
 			}
 
-			p, err := permissions.Request(ctx,
+			p, err := permissions.Request(
+				ctx,
 				permission.CreatePermissionRequest{
 					SessionID:   sessionID,
 					Path:        workingDir,
@@ -114,7 +115,7 @@ func NewFetchTool(permissions permission.Service, workingDir string, client *htt
 				return fantasy.ToolResponse{}, fmt.Errorf("failed to create request: %w", err)
 			}
 
-			req.Header.Set("User-Agent", "crush/1.0")
+			req.Header.Set("User-Agent", "hyper/1.0")
 
 			resp, err := client.Do(req)
 			if err != nil {
@@ -184,7 +185,8 @@ func NewFetchTool(permissions permission.Service, workingDir string, client *htt
 			}
 
 			return fantasy.NewTextResponse(content), nil
-		})
+		},
+	)
 }
 
 func extractTextFromHTML(html string) (string, error) {

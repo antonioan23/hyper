@@ -10,12 +10,12 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/stringext"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/permission"
+	"github.com/charmbracelet/hyper/internal/stringext"
+	"github.com/charmbracelet/hyper/internal/ui/common"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -775,7 +775,8 @@ func (p *Permissions) ShortHelp() []key.Binding {
 	}
 
 	if p.hasDiffView() {
-		bindings = append(bindings,
+		bindings = append(
+			bindings,
 			p.keyMap.ToggleDiffMode,
 			p.keyMap.ToggleFullscreen,
 		)

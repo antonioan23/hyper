@@ -1,13 +1,13 @@
 package cmd
 
 import (
+	"image/color"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/charmbracelet/hyper/internal/config"
 	"github.com/charmbracelet/x/term"
 	"github.com/spf13/cobra"
 )
@@ -15,12 +15,12 @@ import (
 var dirsCmd = &cobra.Command{
 	Use:   "dirs",
 	Short: "Show config and data directories",
-	Long: `Show where Crush stores its configuration and data,
+	Long: `Show where Hyper stores its configuration and data,
 including any project-level config files discovered
 from the current directory up to the project root.`,
 	Example: `
 # Show all directories
-crush dirs
+hyper dirs
   `,
 	Run: func(cmd *cobra.Command, args []string) {
 		entries := collectDirs(cmd)
@@ -58,7 +58,7 @@ func collectDirs(cmd *cobra.Command) []string {
 }
 
 func printDirs(cmd *cobra.Command, dirs []string) {
-	labelStyle := lipgloss.NewStyle().Bold(true).Foreground(charmtone.Charple)
+	labelStyle := lipgloss.NewStyle().Bold(true).Foreground(color.RGBA{R: 56, G: 152, B: 236, A: 255})
 
 	labels := make([]string, len(dirs))
 	longest := 0
@@ -76,7 +76,7 @@ func printDirs(cmd *cobra.Command, dirs []string) {
 			" " + d)
 	}
 
-	lipgloss.Println(lipgloss.NewStyle().Foreground(charmtone.Squid).Render("Configs merge from top to bottom"))
+	lipgloss.Println(lipgloss.NewStyle().Foreground(color.RGBA{R: 94, G: 93, B: 89, A: 255}).Render("Configs merge from top to bottom"))
 }
 
 func dirLabel(i int) string {

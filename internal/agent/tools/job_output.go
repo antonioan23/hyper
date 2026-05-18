@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/shell"
+	"github.com/charmbracelet/hyper/internal/shell"
 )
 
 const (
@@ -87,5 +87,6 @@ func NewJobOutputTool() fantasy.AgentTool {
 
 			result := fmt.Sprintf("Status: %s\n\n%s", status, output)
 			return fantasy.WithResponseMetadata(fantasy.NewTextResponse(result), metadata), nil
-		})
+		},
+	)
 }

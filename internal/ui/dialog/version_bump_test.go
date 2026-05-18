@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"charm.land/catwalk/pkg/catwalk"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/ui/list"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 	"github.com/stretchr/testify/require"
 )

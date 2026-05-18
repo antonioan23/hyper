@@ -17,11 +17,11 @@ import (
 	"unicode/utf8"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/filetracker"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/permission"
+	"github.com/charmbracelet/hyper/internal/skills"
 )
 
 //go:embed view.md.tpl
@@ -103,7 +103,7 @@ func NewViewTool(
 				return fantasy.NewTextErrorResponse("file_path is required"), nil
 			}
 
-			// Handle builtin skill files (crush: prefix).
+			// Handle builtin skill files (hyper: prefix).
 			if strings.HasPrefix(params.FilePath, skills.BuiltinPrefix) {
 				resp, err := readBuiltinFile(params, skillTracker)
 				return resp, err
@@ -134,7 +134,8 @@ func NewViewTool(
 
 			// Request permission for files outside working directory, unless it's a skill file.
 			if isOutsideWorkDir && !isSkillFile {
-				granted, permReqErr := permissions.Request(ctx,
+				granted, permReqErr := permissions.Request(
+					ctx,
 					permission.CreatePermissionRequest{
 						SessionID:   sessionID,
 						Path:        absFilePath,
@@ -274,7 +275,8 @@ func NewViewTool(
 				fantasy.NewTextResponse(output),
 				meta,
 			), nil
-		})
+		},
+	)
 }
 
 func addLineNumbers(content string, startLine int) string {

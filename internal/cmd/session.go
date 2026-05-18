@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"image/color"
 	"io"
 	"os"
 	"os/exec"
@@ -16,16 +17,15 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/colorprofile"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/chat"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/db"
+	"github.com/charmbracelet/hyper/internal/event"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/ui/chat"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/charmbracelet/x/exp/charmtone"
 	"github.com/charmbracelet/x/term"
 	"github.com/spf13/cobra"
 )
@@ -34,7 +34,7 @@ var sessionCmd = &cobra.Command{
 	Use:     "session",
 	Aliases: []string{"sessions", "s"},
 	Short:   "Manage sessions",
-	Long:    "Manage Crush sessions. Agents can use --json for machine-readable output.",
+	Long:    "Manage Hyper sessions. Agents can use --json for machine-readable output.",
 }
 
 var (
@@ -169,8 +169,8 @@ func runSessionList(cmd *cobra.Command, _ []string) error {
 	w, cleanup, usingPager := sessionWriter(ctx, len(list))
 	defer cleanup()
 
-	hashStyle := lipgloss.NewStyle().Foreground(charmtone.Malibu)
-	dateStyle := lipgloss.NewStyle().Foreground(charmtone.Damson)
+	hashStyle := lipgloss.NewStyle().Foreground(color.RGBA{R: 56, G: 152, B: 236, A: 255})
+	dateStyle := lipgloss.NewStyle().Foreground(color.RGBA{R: 42, G: 122, B: 200, A: 255})
 
 	width := sessionOutputWidth
 	if tw, _, err := term.GetSize(os.Stdout.Fd()); err == nil && tw > 0 {
@@ -453,8 +453,8 @@ func outputSessionHuman(ctx context.Context, cfg *config.ConfigStore, sess sessi
 	}
 	contentWidth := min(width, sessionMaxContentWidth)
 
-	keyStyle := lipgloss.NewStyle().Foreground(charmtone.Damson)
-	valStyle := lipgloss.NewStyle().Foreground(charmtone.Malibu)
+	keyStyle := lipgloss.NewStyle().Foreground(color.RGBA{R: 42, G: 122, B: 200, A: 255})
+	valStyle := lipgloss.NewStyle().Foreground(color.RGBA{R: 56, G: 152, B: 236, A: 255})
 
 	hash := session.HashID(sess.ID)[:12]
 	created := time.Unix(sess.CreatedAt, 0).Format("Mon Jan 2 15:04:05 2006 -0700")

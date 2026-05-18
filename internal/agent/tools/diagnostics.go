@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/lsp"
 	"github.com/charmbracelet/x/powernap/pkg/lsp/protocol"
 )
 
@@ -35,7 +35,8 @@ func NewDiagnosticsTool(lspManager *lsp.Manager) fantasy.AgentTool {
 			notifyLSPs(ctx, lspManager, params.FilePath)
 			output := getDiagnostics(params.FilePath, lspManager)
 			return fantasy.NewTextResponse(output), nil
-		})
+		},
+	)
 }
 
 // openInLSPs ensures LSP servers are running and aware of the file, but does

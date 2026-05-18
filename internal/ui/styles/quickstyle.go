@@ -10,8 +10,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/glamour/v2/ansi"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/ui/diffview"
-	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/charmbracelet/hyper/internal/ui/diffview"
 )
 
 // quickStyleOpts is the palette of colors used by quickStyle to simplify the
@@ -207,7 +206,7 @@ func quickStyle(o quickStyleOpts) Styles {
 			Unticked:       "[ ] ",
 		},
 		Link: ansi.StylePrimitive{
-			Color:     hex(charmtone.Zinc),
+			Color:     hex(claudeWarmSilver),
 			Underline: new(true),
 		},
 		LinkText: ansi.StylePrimitive{
@@ -215,7 +214,7 @@ func quickStyle(o quickStyleOpts) Styles {
 			Bold:  new(true),
 		},
 		Image: ansi.StylePrimitive{
-			Color:     hex(charmtone.Cheeky),
+			Color:     hex(claudeCoralLight),
 			Underline: new(true),
 		},
 		ImageText: ansi.StylePrimitive{
@@ -249,22 +248,22 @@ func quickStyle(o quickStyleOpts) Styles {
 					Color: hex(o.fgMostSubtle),
 				},
 				CommentPreproc: ansi.StylePrimitive{
-					Color: hex(charmtone.Bengal),
+					Color: hex(claudeIronWarm),
 				},
 				Keyword: ansi.StylePrimitive{
 					Color: hex(o.info),
 				},
 				KeywordReserved: ansi.StylePrimitive{
-					Color: hex(charmtone.Pony),
+					Color: hex(claudeTerracotta),
 				},
 				KeywordNamespace: ansi.StylePrimitive{
-					Color: hex(charmtone.Pony),
+					Color: hex(claudeTerracotta),
 				},
 				KeywordType: ansi.StylePrimitive{
-					Color: hex(charmtone.Guppy),
+					Color: hex(claudeCoralLight),
 				},
 				Operator: ansi.StylePrimitive{
-					Color: hex(charmtone.Salmon),
+					Color: hex(claudeWarmSilver),
 				},
 				Punctuation: ansi.StylePrimitive{
 					Color: hex(o.warningSubtle),
@@ -273,21 +272,21 @@ func quickStyle(o quickStyleOpts) Styles {
 					Color: hex(o.fgSubtle),
 				},
 				NameBuiltin: ansi.StylePrimitive{
-					Color: hex(charmtone.Cheeky),
+					Color: hex(claudeFocusBlue),
 				},
 				NameTag: ansi.StylePrimitive{
-					Color: hex(charmtone.Mauve),
+					Color: hex(claudeCoral),
 				},
 				NameAttribute: ansi.StylePrimitive{
-					Color: hex(charmtone.Hazy),
+					Color: hex(claudeBlueMid),
 				},
 				NameClass: ansi.StylePrimitive{
-					Color:     hex(charmtone.Salt),
+					Color:     hex(claudeParchment),
 					Underline: new(true),
 					Bold:      new(true),
 				},
 				NameDecorator: ansi.StylePrimitive{
-					Color: hex(charmtone.Citron),
+					Color: hex(claudeWarningGold),
 				},
 				NameFunction: ansi.StylePrimitive{
 					Color: hex(o.successMostSubtle),
@@ -296,7 +295,7 @@ func quickStyle(o quickStyleOpts) Styles {
 					Color: hex(o.success),
 				},
 				LiteralString: ansi.StylePrimitive{
-					Color: hex(charmtone.Cumin),
+					Color: hex(claudeCoralLight),
 				},
 				LiteralStringEscape: ansi.StylePrimitive{
 					Color: hex(o.successMoreSubtle),
@@ -529,23 +528,23 @@ func quickStyle(o quickStyleOpts) Styles {
 		},
 		InsertLine: diffview.LineStyle{
 			LineNumber: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("#629657")).
-				Background(lipgloss.Color("#2b322a")),
+				Foreground(claudeForest).
+				Background(claudeDiffAddSubtle),
 			Symbol: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("#629657")).
-				Background(lipgloss.Color("#323931")),
+				Foreground(claudeForest).
+				Background(claudeDiffAddBg),
 			Code: lipgloss.NewStyle().
-				Background(lipgloss.Color("#323931")),
+				Background(claudeDiffAddBg),
 		},
 		DeleteLine: diffview.LineStyle{
 			LineNumber: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("#a45c59")).
-				Background(lipgloss.Color("#312929")),
+				Foreground(claudeErrorCrimson).
+				Background(claudeDiffDelSubtle),
 			Symbol: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("#a45c59")).
-				Background(lipgloss.Color("#383030")),
+				Foreground(claudeErrorCrimson).
+				Background(claudeDiffDelBg),
 			Code: lipgloss.NewStyle().
-				Background(lipgloss.Color("#383030")),
+				Background(claudeDiffDelBg),
 		},
 		Filename: diffview.LineStyle{
 			LineNumber: lipgloss.NewStyle().
@@ -577,7 +576,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.Header.Charm = base.Foreground(o.secondary)
 	s.Header.Diagonals = base.Foreground(o.primary)
 	s.Header.Percentage = muted
-	s.Header.Hypercredit = base.Foreground(charmtone.Dolly)
+	s.Header.Hypercredit = base.Foreground(claudeCoral)
 	s.Header.Keystroke = muted
 	s.Header.KeystrokeTip = subtle
 	s.Header.WorkingDir = muted
@@ -764,7 +763,7 @@ func quickStyle(o quickStyleOpts) Styles {
 	s.ModelInfo.TokenCount = lipgloss.NewStyle().Foreground(o.fgMostSubtle)
 	s.ModelInfo.TokenPercentage = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
 	s.ModelInfo.Cost = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
-	s.ModelInfo.HypercreditIcon = lipgloss.NewStyle().Foreground(charmtone.Dolly)
+	s.ModelInfo.HypercreditIcon = lipgloss.NewStyle().Foreground(claudeCoral)
 	s.ModelInfo.HypercreditText = lipgloss.NewStyle().Foreground(o.fgMoreSubtle)
 
 	// ResourceGroup

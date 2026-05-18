@@ -9,11 +9,11 @@ import (
 	"charm.land/bubbles/v2/spinner"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/commands"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/ui/common"
+	"github.com/charmbracelet/hyper/internal/ui/list"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	uv "github.com/charmbracelet/ultraviolet"
 )
 
@@ -510,7 +510,8 @@ func (c *Commands) defaultCommands() []*CommandItem {
 	}
 	commands = append(commands, NewCommandItem(c.com.Styles, "toggle_notifications", notificationLabel, "", ActionToggleNotifications{}))
 
-	commands = append(commands,
+	commands = append(
+		commands,
 		NewCommandItem(c.com.Styles, "toggle_yolo", "Toggle Yolo Mode", "", ActionToggleYoloMode{}),
 		NewCommandItem(c.com.Styles, "toggle_help", "Toggle Help", "ctrl+g", ActionToggleHelp{}),
 		NewCommandItem(c.com.Styles, "init", "Initialize Project", "", ActionInitializeProject{}),
@@ -523,7 +524,8 @@ func (c *Commands) defaultCommands() []*CommandItem {
 	}
 	commands = append(commands, NewCommandItem(c.com.Styles, "toggle_transparent", transparentLabel, "", ActionToggleTransparentBackground{}))
 
-	commands = append(commands,
+	commands = append(
+		commands,
 		NewCommandItem(c.com.Styles, "quit", "Quit", "ctrl+c", tea.QuitMsg{}).WithAliases("exit"),
 	)
 

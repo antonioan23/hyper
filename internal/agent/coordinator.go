@@ -18,24 +18,24 @@ import (
 
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/agent/prompt"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/home"
-	"github.com/charmbracelet/crush/internal/hooks"
-	"github.com/charmbracelet/crush/internal/log"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/oauth/copilot"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
+	"github.com/charmbracelet/hyper/internal/agent/hyper"
+	"github.com/charmbracelet/hyper/internal/agent/notify"
+	"github.com/charmbracelet/hyper/internal/agent/prompt"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/event"
+	"github.com/charmbracelet/hyper/internal/filetracker"
+	"github.com/charmbracelet/hyper/internal/history"
+	"github.com/charmbracelet/hyper/internal/home"
+	"github.com/charmbracelet/hyper/internal/hooks"
+	"github.com/charmbracelet/hyper/internal/log"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/oauth/copilot"
+	"github.com/charmbracelet/hyper/internal/permission"
+	"github.com/charmbracelet/hyper/internal/pubsub"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/skills"
 	"golang.org/x/sync/errgroup"
 
 	"charm.land/fantasy/providers/anthropic"
@@ -483,7 +483,7 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		}
 	}
 
-	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "crush.log")
+	logFile := filepath.Join(c.cfg.Config().Options.DataDirectory, "logs", "hyper.log")
 
 	// Build hook runner if PreToolUse hooks are configured.
 	var hookRunner *hooks.Runner
@@ -491,10 +491,11 @@ func (c *coordinator) buildTools(ctx context.Context, agent config.Agent, isSubA
 		hookRunner = hooks.NewRunner(preToolHooks, c.cfg.WorkingDir(), c.cfg.WorkingDir())
 	}
 
-	allTools = append(allTools,
+	allTools = append(
+		allTools,
 		tools.NewBashTool(c.permissions, c.cfg.WorkingDir(), c.cfg.Config().Options.Attribution, modelID),
-		tools.NewCrushInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
-		tools.NewCrushLogsTool(logFile),
+		tools.NewHyperInfoTool(c.cfg, c.lspManager, c.allSkills, c.activeSkills, c.skillTracker),
+		tools.NewHyperLogsTool(logFile),
 		tools.NewJobOutputTool(),
 		tools.NewJobKillTool(),
 		tools.NewDownloadTool(c.permissions, c.cfg.WorkingDir(), nil),
@@ -740,7 +741,8 @@ func (c *coordinator) buildOpenaiCompatProvider(baseURL, apiKey string, headers 
 	// Set HTTP client based on provider and debug mode.
 	var httpClient *http.Client
 	if providerID == string(catwalk.InferenceProviderCopilot) {
-		opts = append(opts,
+		opts = append(
+			opts,
 			openaicompat.WithUseResponsesAPI(),
 			openaicompat.WithResponsesAPIFunc(func(modelID string) bool {
 				return copilotResponsesModels[modelID]
@@ -888,7 +890,7 @@ func (c *coordinator) buildProvider(providerCfg config.ProviderConfig, model con
 		switch providerCfg.ID {
 		case hyper.Name:
 			baseURL = hyper.BaseURL() + "/v1"
-			headers["x-crush-id"] = event.GetID()
+			headers["x-hyper-id"] = event.GetID()
 		case string(catwalk.InferenceProviderZAI):
 			if providerCfg.ExtraBody == nil {
 				providerCfg.ExtraBody = map[string]any{}
@@ -1213,7 +1215,8 @@ func logTurnSkillUsage(
 		}
 	}
 
-	slog.Info("Skill turn summary",
+	slog.Info(
+		"Skill turn summary",
 		"component", "skills",
 		"session_id", sessionID,
 		"prompt_len", len(prompt),
@@ -1257,7 +1260,8 @@ func logDiscoveryStats(
 
 	xml := skills.ToPromptXML(activeSkills)
 
-	slog.Info("Skill discovery complete",
+	slog.Info(
+		"Skill discovery complete",
 		"component", "skills",
 		"builtin_ok", len(builtin),
 		"builtin_errors", countErrors(builtinStates),

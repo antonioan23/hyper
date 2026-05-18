@@ -25,34 +25,34 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	agenttools "github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/commands"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/home"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/attachments"
-	"github.com/charmbracelet/crush/internal/ui/chat"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/completions"
-	"github.com/charmbracelet/crush/internal/ui/dialog"
-	fimage "github.com/charmbracelet/crush/internal/ui/image"
-	"github.com/charmbracelet/crush/internal/ui/logo"
-	"github.com/charmbracelet/crush/internal/ui/notification"
-	"github.com/charmbracelet/crush/internal/ui/styles"
-	"github.com/charmbracelet/crush/internal/ui/util"
-	"github.com/charmbracelet/crush/internal/version"
-	"github.com/charmbracelet/crush/internal/workspace"
+	"github.com/charmbracelet/hyper/internal/agent/hyper"
+	"github.com/charmbracelet/hyper/internal/agent/notify"
+	agenttools "github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/app"
+	"github.com/charmbracelet/hyper/internal/commands"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/history"
+	"github.com/charmbracelet/hyper/internal/home"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/permission"
+	"github.com/charmbracelet/hyper/internal/pubsub"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/skills"
+	"github.com/charmbracelet/hyper/internal/ui/anim"
+	"github.com/charmbracelet/hyper/internal/ui/attachments"
+	"github.com/charmbracelet/hyper/internal/ui/chat"
+	"github.com/charmbracelet/hyper/internal/ui/common"
+	"github.com/charmbracelet/hyper/internal/ui/completions"
+	"github.com/charmbracelet/hyper/internal/ui/dialog"
+	fimage "github.com/charmbracelet/hyper/internal/ui/image"
+	"github.com/charmbracelet/hyper/internal/ui/logo"
+	"github.com/charmbracelet/hyper/internal/ui/notification"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/ui/util"
+	"github.com/charmbracelet/hyper/internal/version"
+	"github.com/charmbracelet/hyper/internal/workspace"
 	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/ultraviolet/layout"
 	"github.com/charmbracelet/ultraviolet/screen"
@@ -664,7 +664,7 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 		if cmd := m.sendNotification(notification.Notification{
-			Title:   "Crush is waiting...",
+			Title:   "Hyper is waiting...",
 			Message: fmt.Sprintf("Permission required to execute \"%s\"", msg.Payload.ToolName),
 		}); cmd != nil {
 			cmds = append(cmds, cmd)
@@ -880,9 +880,9 @@ func (m *UI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		cmds = append(cmds, clearInfoMsgCmd(ttl))
 	case app.UpdateAvailableMsg:
-		text := fmt.Sprintf("Crush update available: v%s → v%s.", msg.CurrentVersion, msg.LatestVersion)
+		text := fmt.Sprintf("Hyper update available: v%s → v%s.", msg.CurrentVersion, msg.LatestVersion)
 		if msg.IsDevelopment {
-			text = fmt.Sprintf("This is a development version of Crush. The latest version is v%s.", msg.LatestVersion)
+			text = fmt.Sprintf("This is a development version of Hyper. The latest version is v%s.", msg.LatestVersion)
 		}
 		ttl := 10 * time.Second
 		m.status.SetInfoMsg(util.InfoMsg{
@@ -2200,7 +2200,7 @@ func (m *UI) Draw(scr uv.Screen, area uv.Rectangle) *tea.Cursor {
 	}
 
 	// Debugging rendering (visually see when the tui rerenders)
-	if os.Getenv("CRUSH_UI_DEBUG") == "true" {
+	if os.Getenv("HYPER_UI_DEBUG") == "true" {
 		debugView := lipgloss.NewStyle().Background(lipgloss.ANSIColor(rand.Intn(256))).Width(4).Height(2)
 		debug := uv.NewStyledString(debugView.String())
 		debug.Draw(scr, image.Rectangle{
@@ -2246,7 +2246,7 @@ func (m *UI) View() tea.View {
 	}
 	v.MouseMode = tea.MouseModeCellMotion
 	v.ReportFocus = m.caps.ReportFocusEvents
-	v.WindowTitle = "crush " + home.Short(m.com.Workspace.WorkingDir())
+	v.WindowTitle = "hyper " + home.Short(m.com.Workspace.WorkingDir())
 
 	canvas := uv.NewScreenBuffer(m.width, m.height)
 	v.Cursor = m.Draw(canvas, canvas.Bounds())
@@ -2301,7 +2301,8 @@ func (m *UI) ShortHelp() []key.Binding {
 			tab.SetHelp("tab", "focus editor")
 		}
 
-		binds = append(binds,
+		binds = append(
+			binds,
 			tab,
 			commands,
 			k.Models,
@@ -2309,11 +2310,13 @@ func (m *UI) ShortHelp() []key.Binding {
 
 		switch m.focus {
 		case uiFocusEditor:
-			binds = append(binds,
+			binds = append(
+				binds,
 				k.Editor.Newline,
 			)
 		case uiFocusMain:
-			binds = append(binds,
+			binds = append(
+				binds,
 				k.Chat.UpDown,
 				k.Chat.UpDownOneItem,
 				k.Chat.PageUp,
@@ -2328,14 +2331,16 @@ func (m *UI) ShortHelp() []key.Binding {
 		// TODO: other states
 		// if m.session == nil {
 		// no session selected
-		binds = append(binds,
+		binds = append(
+			binds,
 			commands,
 			k.Models,
 			k.Editor.Newline,
 		)
 	}
 
-	binds = append(binds,
+	binds = append(
+		binds,
 		k.Quit,
 		k.Help,
 	)
@@ -2382,7 +2387,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 			tab.SetHelp("tab", "focus editor")
 		}
 
-		mainBinds = append(mainBinds,
+		mainBinds = append(
+			mainBinds,
 			tab,
 			commands,
 			k.Models,
@@ -2406,7 +2412,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 			}
 			binds = append(binds, editorBinds)
 			if hasAttachments {
-				binds = append(binds,
+				binds = append(
+					binds,
 					[]key.Binding{
 						k.Editor.AttachmentDeleteMode,
 						k.Editor.DeleteAllAttachments,
@@ -2415,7 +2422,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 				)
 			}
 		case uiFocusMain:
-			binds = append(binds,
+			binds = append(
+				binds,
 				[]key.Binding{
 					k.Chat.UpDown,
 					k.Chat.UpDownOneItem,
@@ -2440,7 +2448,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 	default:
 		if m.session == nil {
 			// no session selected
-			binds = append(binds,
+			binds = append(
+				binds,
 				[]key.Binding{
 					commands,
 					k.Models,
@@ -2457,7 +2466,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 			}
 			binds = append(binds, editorBinds)
 			if hasAttachments {
-				binds = append(binds,
+				binds = append(
+					binds,
 					[]key.Binding{
 						k.Editor.AttachmentDeleteMode,
 						k.Editor.DeleteAllAttachments,
@@ -2468,7 +2478,8 @@ func (m *UI) FullHelp() [][]key.Binding {
 		}
 	}
 
-	binds = append(binds,
+	binds = append(
+		binds,
 		[]key.Binding{
 			help,
 			k.Quit,
@@ -2813,7 +2824,7 @@ func (m *UI) openEditor(value string) tea.Cmd {
 		return util.ReportError(err)
 	}
 	cmd, err := editor.Command(
-		"crush",
+		"hyper",
 		tmpPath,
 		editor.AtPosition(
 			m.textarea.Line()+1,
@@ -3402,7 +3413,7 @@ func (m *UI) handleAgentNotification(n notify.Notification) tea.Cmd {
 	case notify.TypeAgentFinished:
 		var cmds []tea.Cmd
 		cmds = append(cmds, m.sendNotification(notification.Notification{
-			Title:   "Crush is waiting...",
+			Title:   "Hyper is waiting...",
 			Message: fmt.Sprintf("Agent's turn completed in \"%s\"", n.SessionTitle),
 		}))
 		if m.com.IsHyper() {
@@ -3806,7 +3817,7 @@ func (m *UI) disableDockerMCP() tea.Msg {
 	return util.NewInfoMsg("Docker MCP disabled successfully")
 }
 
-// renderLogo renders the Crush logo with the given styles and dimensions.
+// renderLogo renders the Hyper logo with the given styles and dimensions.
 func renderLogo(t *styles.Styles, compact, hyper bool, width int) string {
 	return logo.Render(t.Logo.GradCanvas, version.Version, compact, logo.Opts{
 		FieldColor:   t.Logo.FieldColor,

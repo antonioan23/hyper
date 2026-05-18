@@ -7,9 +7,9 @@ import (
 
 	"charm.land/fantasy"
 
-	"github.com/charmbracelet/crush/internal/agent/prompt"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/hyper/internal/agent/prompt"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/config"
 )
 
 //go:embed templates/agent_tool.md
@@ -63,5 +63,6 @@ func (c *coordinator) agentTool(ctx context.Context) (fantasy.AgentTool, error) 
 				Prompt:         params.Prompt,
 				SessionTitle:   "New Agent Session",
 			})
-		}), nil
+		},
+	), nil
 }

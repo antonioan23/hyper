@@ -10,17 +10,17 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/tree"
-	"github.com/charmbracelet/crush/internal/agent"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/diff"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/hooks"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/stringext"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/common"
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/agent"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/diff"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/hooks"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/stringext"
+	"github.com/charmbracelet/hyper/internal/ui/anim"
+	"github.com/charmbracelet/hyper/internal/ui/common"
+	"github.com/charmbracelet/hyper/internal/ui/list"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
 )
 
@@ -690,9 +690,10 @@ func toolOutputCodeContent(sty *styles.Styles, path, content string, offset, wid
 
 	// Add truncation message if needed.
 	if len(lines) > maxLines && !expanded {
-		out = append(out, sty.Tool.ContentCodeTruncation.
-			Width(width).
-			Render(fmt.Sprintf(assistantMessageTruncateFormat, len(lines)-maxLines)),
+		out = append(
+			out, sty.Tool.ContentCodeTruncation.
+				Width(width).
+				Render(fmt.Sprintf(assistantMessageTruncateFormat, len(lines)-maxLines)),
 		)
 	}
 
@@ -851,7 +852,8 @@ func renderHookLine(sty *styles.Styles, hi hooks.HookInfo, rawName, detail strin
 		arrowStyle = sty.Tool.HookDeniedLabel
 	}
 
-	return fmt.Sprintf("%s %s%s%s %s %s",
+	return fmt.Sprintf(
+		"%s %s%s%s %s %s",
 		labelStyle.Render("Hook"),
 		name,
 		namePad,
@@ -1063,9 +1065,10 @@ func toolOutputMarkdownContent(sty *styles.Styles, content string, width int, ex
 	}
 
 	if len(lines) > maxLines && !expanded {
-		out = append(out, sty.Tool.ContentTruncation.
-			Width(width).
-			Render(fmt.Sprintf(assistantMessageTruncateFormat, len(lines)-maxLines)),
+		out = append(
+			out, sty.Tool.ContentTruncation.
+				Width(width).
+				Render(fmt.Sprintf(assistantMessageTruncateFormat, len(lines)-maxLines)),
 		)
 	}
 

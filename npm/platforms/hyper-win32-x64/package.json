@@ -1,0 +1,15 @@
+{
+  "name": "@hostclube/hyper-win32-x64",
+  "version": "0.1.2",
+  "description": "Hyper native binary for win32-x64",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charmbracelet/hyper.git",
+    "directory": "npm/platforms/hyper-win32-x64"
+  },
+  "license": "MIT",
+  "author": "Charm",
+  "os": ["win32"],
+  "cpu": ["x64"],
+  "files": ["bin/"]
+}

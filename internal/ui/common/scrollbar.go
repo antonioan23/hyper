@@ -3,7 +3,7 @@ package common
 import (
 	"strings"
 
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 )
 
 // Scrollbar renders a vertical scrollbar based on content and viewport size.

@@ -1,0 +1,41 @@
+{
+  "name": "@hostclube/hyper",
+  "version": "0.1.2",
+  "description": "Hyper - AI coding assistant for the terminal",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charmbracelet/hyper.git"
+  },
+  "homepage": "https://charm.land/hyper",
+  "bugs": {
+    "url": "https://github.com/charmbracelet/hyper/issues"
+  },
+  "license": "MIT",
+  "author": "Charm",
+  "bin": {
+    "hyper": "bin/hyper"
+  },
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "files": [
+    "bin/hyper",
+    "postinstall.js"
+  ],
+  "optionalDependencies": {
+    "@hostclube/hyper-win32-x64": "0.1.2",
+    "@hostclube/hyper-darwin-arm64": "0.1.2",
+    "@hostclube/hyper-darwin-x64": "0.1.2",
+    "@hostclube/hyper-linux-x64": "0.1.2",
+    "@hostclube/hyper-linux-arm64": "0.1.2"
+  }
+}

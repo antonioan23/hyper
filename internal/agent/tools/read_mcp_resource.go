@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 type ReadMCPResourceParams struct {
@@ -50,7 +50,8 @@ func NewReadMCPResourceTool(cfg *config.ConfigStore, permissions permission.Serv
 			}
 
 			relPath := filepathext.SmartJoin(cfg.WorkingDir(), cmp.Or(params.URI, "mcp-resource"))
-			p, err := permissions.Request(ctx,
+			p, err := permissions.Request(
+				ctx,
 				permission.CreatePermissionRequest{
 					SessionID:   sessionID,
 					Path:        relPath,

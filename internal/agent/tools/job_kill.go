@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/shell"
+	"github.com/charmbracelet/hyper/internal/shell"
 )
 
 const (
@@ -55,5 +55,6 @@ func NewJobKillTool() fantasy.AgentTool {
 
 			result := fmt.Sprintf("Background shell %s terminated successfully", params.ShellID)
 			return fantasy.WithResponseMetadata(fantasy.NewTextResponse(result), metadata), nil
-		})
+		},
+	)
 }

@@ -11,14 +11,14 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/diff"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/history"
+	"github.com/charmbracelet/hyper/internal/diff"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/filetracker"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/history"
 
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 //go:embed write.md
@@ -105,7 +105,8 @@ func NewWriteTool(
 				strings.TrimPrefix(filePath, workingDir),
 			)
 
-			p, err := permissions.Request(ctx,
+			p, err := permissions.Request(
+				ctx,
 				permission.CreatePermissionRequest{
 					SessionID:   sessionID,
 					Path:        fsext.PathOrPrefix(filePath, workingDir),
@@ -161,12 +162,14 @@ func NewWriteTool(
 			result := fmt.Sprintf("File successfully written: %s", filePath)
 			result = fmt.Sprintf("<result>\n%s\n</result>", result)
 			result += getDiagnostics(filePath, lspManager)
-			return fantasy.WithResponseMetadata(fantasy.NewTextResponse(result),
+			return fantasy.WithResponseMetadata(
+				fantasy.NewTextResponse(result),
 				WriteResponseMetadata{
 					Diff:      diff,
 					Additions: additions,
 					Removals:  removals,
 				},
 			), nil
-		})
+		},
+	)
 }

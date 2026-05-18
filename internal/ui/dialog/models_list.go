@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/charmbracelet/crush/internal/ui/list"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/ui/list"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/sahilm/fuzzy"
 )
 

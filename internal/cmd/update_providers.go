@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"image/color"
 	"log/slog"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/charmbracelet/hyper/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -18,22 +18,22 @@ var updateProvidersCmd = &cobra.Command{
 	Long:  `Update provider information from a specified local path or remote URL.`,
 	Example: `
 # Update Catwalk providers remotely (default)
-crush update-providers
+hyper update-providers
 
 # Update Catwalk providers from a custom URL
-crush update-providers https://example.com/providers.json
+hyper update-providers https://example.com/providers.json
 
 # Update Catwalk providers from a local file
-crush update-providers /path/to/local-providers.json
+hyper update-providers /path/to/local-providers.json
 
 # Update Catwalk providers from embedded version
-crush update-providers embedded
+hyper update-providers embedded
 
 # Update Hyper provider information
-crush update-providers --source=hyper
+hyper update-providers --source=hyper
 
 # Update Hyper from a custom URL
-crush update-providers --source=hyper https://hyper.example.com
+hyper update-providers --source=hyper https://hyper.example.com
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// NOTE(@andreynering): We want to skip logging output do stdout here.
@@ -61,8 +61,8 @@ crush update-providers --source=hyper https://hyper.example.com
 		// NOTE(@andreynering): This style is more-or-less copied from Fang's
 		// error message, adapted for success.
 		headerStyle := lipgloss.NewStyle().
-			Foreground(charmtone.Butter).
-			Background(charmtone.Guac).
+			Foreground(color.RGBA{R: 244, G: 242, B: 235, A: 255}).
+			Background(color.RGBA{R: 78, G: 140, B: 94, A: 255}).
 			Bold(true).
 			Padding(0, 1).
 			Margin(1).

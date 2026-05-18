@@ -1,4 +1,4 @@
-// Package agent is the core orchestration layer for Crush AI agents.
+// Package agent is the core orchestration layer for Hyper AI agents.
 //
 // It provides session-based AI agent functionality for managing
 // conversations, tool execution, and message handling. It coordinates
@@ -14,6 +14,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"image/color"
 	"log/slog"
 	"net/http"
 	"os"
@@ -32,18 +33,17 @@ import (
 	"charm.land/fantasy/providers/openrouter"
 	"charm.land/fantasy/providers/vercel"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/agent/hyper"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/agent/tools"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/stringext"
-	"github.com/charmbracelet/crush/internal/version"
-	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/charmbracelet/hyper/internal/agent/hyper"
+	"github.com/charmbracelet/hyper/internal/agent/notify"
+	"github.com/charmbracelet/hyper/internal/agent/tools"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/csync"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/pubsub"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/stringext"
+	"github.com/charmbracelet/hyper/internal/version"
 )
 
 const (
@@ -55,7 +55,7 @@ const (
 	smallContextWindowRatio     = 0.2
 )
 
-var userAgent = fmt.Sprintf("Charm-Crush/%s (https://charm.land/crush)", version.Version)
+var userAgent = fmt.Sprintf("Charm-Hyper/%s (https://charm.land/hyper)", version.Version)
 
 //go:embed templates/title.md
 var titlePrompt []byte
@@ -547,11 +547,11 @@ func (a *sessionAgent) Run(ctx context.Context, call SessionAgentCall) (*fantasy
 		var fantasyErr *fantasy.Error
 		var providerErr *fantasy.ProviderError
 		const defaultTitle = "Provider Error"
-		linkStyle := lipgloss.NewStyle().Foreground(charmtone.Guac).Underline(true)
+		linkStyle := lipgloss.NewStyle().Foreground(color.RGBA{R: 78, G: 140, B: 94, A: 255}).Underline(true)
 		if isCancelErr {
 			currentAssistant.AddFinish(message.FinishReasonCanceled, "User canceled request", "")
 		} else if isHyper && errors.As(err, &providerErr) && providerErr.StatusCode == http.StatusUnauthorized {
-			currentAssistant.AddFinish(message.FinishReasonError, "Unauthorized", `Please re-authenticate with Hyper. You can also run "crush auth" to re-authenticate.`)
+			currentAssistant.AddFinish(message.FinishReasonError, "Unauthorized", `Please re-authenticate with Hyper. You can also run "hyper auth" to re-authenticate.`)
 			if a.notify != nil {
 				a.notify.Publish(pubsub.CreatedEvent, notify.Notification{
 					SessionID:    call.SessionID,
@@ -668,7 +668,8 @@ func (a *sessionAgent) Summarize(ctx context.Context, sessionID string, opts fan
 		}
 	}()
 
-	agent := fantasy.NewAgent(largeModel.Model,
+	agent := fantasy.NewAgent(
+		largeModel.Model,
 		fantasy.WithSystemPrompt(string(summaryPrompt)),
 		fantasy.WithUserAgent(userAgent),
 	)
@@ -777,7 +778,7 @@ func (a *sessionAgent) Summarize(ctx context.Context, sessionID string, opts fan
 }
 
 func (a *sessionAgent) getCacheControlOptions() fantasy.ProviderOptions {
-	if t, _ := strconv.ParseBool(os.Getenv("CRUSH_DISABLE_ANTHROPIC_CACHE")); t {
+	if t, _ := strconv.ParseBool(os.Getenv("HYPER_DISABLE_ANTHROPIC_CACHE")); t {
 		return fantasy.ProviderOptions{}
 	}
 	return fantasy.ProviderOptions{
@@ -814,7 +815,8 @@ func (a *sessionAgent) preparePrompt(msgs []message.Message, supportsImages bool
 	var history []fantasy.Message
 	if !a.isSubAgent {
 		history = append(history, fantasy.NewUserMessage(
-			fmt.Sprintf("<system_reminder>%s</system_reminder>",
+			fmt.Sprintf(
+				"<system_reminder>%s</system_reminder>",
 				`This is a reminder that your todo list is currently empty. DO NOT mention this to the user explicitly because they are already aware.
 If you are working on tasks that would benefit from a todo list please use the "todos" tool to create one.
 If not, please feel free to ignore. Again do not mention this message to the user.`,
@@ -920,7 +922,8 @@ func filterOrphanedToolResults(m message.Message, knownToolCallIDs map[string]st
 		if _, known := knownToolCallIDs[tr.ToolCallID]; known {
 			validParts = append(validParts, part)
 		} else {
-			slog.Warn("Dropping orphaned tool result with no matching tool call",
+			slog.Warn(
+				"Dropping orphaned tool result with no matching tool call",
 				"tool_call_id", tr.ToolCallID,
 			)
 		}
@@ -946,7 +949,8 @@ func syntheticToolResultsForOrphanedCalls(m message.Message, knownToolResultIDs 
 		if _, hasResult := knownToolResultIDs[tc.ID]; hasResult {
 			continue
 		}
-		slog.Warn("Injecting synthetic tool result for orphaned tool call",
+		slog.Warn(
+			"Injecting synthetic tool result for orphaned tool call",
 			"tool_call_id", tc.ID,
 			"tool_name", tc.Name,
 		)
@@ -1004,7 +1008,8 @@ func (a *sessionAgent) generateTitle(ctx context.Context, sessionID string, user
 	}
 
 	newAgent := func(m fantasy.LanguageModel, p []byte, tok int64) fantasy.Agent {
-		return fantasy.NewAgent(m,
+		return fantasy.NewAgent(
+			m,
 			fantasy.WithSystemPrompt(string(p)+"\n /no_think"),
 			fantasy.WithMaxOutputTokens(tok),
 			fantasy.WithUserAgent(userAgent),
@@ -1273,7 +1278,8 @@ func (a *sessionAgent) convertToToolResult(result fantasy.ToolResultContent) mes
 	case fantasy.ToolResultContentTypeMedia:
 		if r, ok := fantasy.AsToolResultOutputType[fantasy.ToolResultOutputContentMedia](result.Result); ok {
 			if !stringext.IsValidBase64(r.Data) {
-				slog.Warn("Tool returned media with invalid base64 data, discarding image",
+				slog.Warn(
+					"Tool returned media with invalid base64 data, discarding image",
 					"tool", result.ToolName,
 					"tool_call_id", result.ToolCallID,
 				)

@@ -1,0 +1,15 @@
+{
+  "name": "@hostclube/hyper-darwin-arm64",
+  "version": "0.1.2",
+  "description": "Hyper native binary for darwin-arm64",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charmbracelet/hyper.git",
+    "directory": "npm/platforms/hyper-darwin-arm64"
+  },
+  "license": "MIT",
+  "author": "Charm",
+  "os": ["darwin"],
+  "cpu": ["arm64"],
+  "files": ["bin/"]
+}

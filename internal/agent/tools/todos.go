@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/session"
+	"github.com/charmbracelet/hyper/internal/session"
 )
 
 //go:embed todos.md
@@ -130,5 +130,6 @@ func NewTodosTool(sessions session.Service) fantasy.AgentTool {
 			}
 
 			return fantasy.WithResponseMetadata(fantasy.NewTextResponse(response), metadata), nil
-		})
+		},
+	)
 }

@@ -1,0 +1,80 @@
+{
+  "name": "CloudVio",
+  "id": "cloudvio",
+  "api_endpoint": "http://179.42.8.135:8000/v1",
+  "type": "openai-compat",
+  "default_large_model_id": "deepseek-v3-terminus-free",
+  "default_small_model_id": "deepseek-v4-flash-free",
+  "models": [
+    {
+      "id": "deepseek-v3-terminus-free",
+      "name": "DeepSeek V3 Terminus (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384,
+      "can_reason": true
+    },
+    {
+      "id": "glm-4.6-free",
+      "name": "GLM 4.6 (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    },
+    {
+      "id": "gpt-oss-120b-free",
+      "name": "GPT OSS 120B (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    },
+    {
+      "id": "qwen3-coder-free",
+      "name": "Qwen3 Coder (Free)",
+      "context_window": 262144,
+      "default_max_tokens": 16384,
+      "can_reason": true
+    },
+    {
+      "id": "deepseek-v4-flash-free",
+      "name": "DeepSeek V4 Flash (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 8192
+    },
+    {
+      "id": "kimi-k2-free",
+      "name": "Kimi K2 (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384,
+      "can_reason": true
+    },
+    {
+      "id": "minimax-m2.5-free",
+      "name": "MiniMax M2.5 (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    },
+    {
+      "id": "nemotron-3-super-free",
+      "name": "Nemotron 3 Super (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    },
+    {
+      "id": "qwen3.6-plus-free",
+      "name": "Qwen 3.6 Plus (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384,
+      "can_reason": true
+    },
+    {
+      "id": "sony-agi-2-mini-free",
+      "name": "Sony AGI 2 Mini (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    },
+    {
+      "id": "acegraph-v3-free",
+      "name": "AceGraph V3 (Free)",
+      "context_window": 131072,
+      "default_max_tokens": 16384
+    }
+  ]
+}

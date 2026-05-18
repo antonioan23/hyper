@@ -1,4 +1,4 @@
-// Package logo renders a Crush wordmark in a stylized way.
+// Package logo renders a Hyper wordmark in a stylized way.
 package logo
 
 import (
@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 	"github.com/charmbracelet/x/ansi"
 )
 
@@ -18,7 +18,7 @@ type letterform func(bool) string
 
 const diag = `╱`
 
-// Opts are the options for rendering the Crush title art.
+// Opts are the options for rendering the Hyper title art.
 type Opts struct {
 	FieldColor   color.Color // diagonal lines
 	TitleColorA  color.Color // left gradient ramp point
@@ -26,7 +26,7 @@ type Opts struct {
 	CharmColor   color.Color // Charm™ text color
 	VersionColor color.Color // version text color
 	Width        int         // width of the rendered logo, used for truncation
-	Hyper        bool        // whether it is Crush or Hypercrush
+	Hyper        bool        // whether it is Hyper or full Hyper logo
 
 	// When true, stretch a random letterform on each render. Has no effect in
 	// compact mode. Mainly for testing. In production you will want to cache
@@ -34,16 +34,13 @@ type Opts struct {
 	Unstable bool
 }
 
-// Render renders the Crush logo. Set the argument to true to render the narrow
+// Render renders the Hyper logo. Set the argument to true to render the narrow
 // version, intended for use in a sidebar.
 //
 // The compact argument determines whether it renders compact for the sidebar
 // or wider for the main pane.
 func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	charm := "Charm™"
-	if !o.Hyper {
-		charm = " " + charm
-	}
 
 	fg := func(c color.Color, s string) string {
 		return lipgloss.NewStyle().Foreground(c).Render(s)
@@ -52,65 +49,47 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	// Title.
 	const spacing = 1
 	var hyperLetterforms []letterform
-	if o.Hyper {
-		hyperLetterforms = []letterform{
-			LetterH,
-			LetterYAlt,
-			LetterP,
-			LetterE,
-			LetterR,
-		}
-	}
-	crushLetterforms := []letterform{
-		LetterC,
-		LetterR,
-		LetterU,
-		LetterSAlt,
+	hyperLetterforms = []letterform{
 		LetterH,
-	}
-	if o.Hyper && !compact {
-		crushLetterforms = append(hyperLetterforms, crushLetterforms...)
+		LetterYAlt,
+		LetterP,
+		LetterE,
+		LetterR,
 	}
 
 	stretchIndex := -1 // -1 means no stretching.
 	if !compact && !o.Unstable {
 		// Always stretch the same letterform, which is picked once at random.
-		stretchIndex = cachedRandN(len(crushLetterforms))
+		stretchIndex = cachedRandN(len(hyperLetterforms))
 	} else if !compact && o.Unstable {
 		// Stretch a random letterform on every render.
-		stretchIndex = rand.IntN(len(crushLetterforms))
+		stretchIndex = rand.IntN(len(hyperLetterforms))
 	}
-	crush := renderWord(spacing, stretchIndex, crushLetterforms...)
-	if o.Hyper && compact {
-		crush = renderWord(spacing, stretchIndex, hyperLetterforms...) + "\n" + crush
-	}
-	crushWidth := lipgloss.Width(crush)
+	hyper := renderWord(spacing, stretchIndex, hyperLetterforms...)
+	hyperWidth := lipgloss.Width(hyper)
 	b := new(strings.Builder)
-	for r := range strings.SplitSeq(crush, "\n") {
+	for r := range strings.SplitSeq(hyper, "\n") {
 		fmt.Fprintln(b, styles.ApplyForegroundGrad(base, r, o.TitleColorA, o.TitleColorB))
 	}
-	crush = b.String()
+	hyper = b.String()
 
 	// Charm and version.
 	metaRowGap := 1
-	maxVersionWidth := crushWidth - lipgloss.Width(charm) - metaRowGap
+	maxVersionWidth := hyperWidth - lipgloss.Width(charm) - metaRowGap
 	version = ansi.Truncate(version, maxVersionWidth, "…") // truncate version if too long.
-	if o.Hyper && compact {
-		version += " "
-	}
-	gap := max(0, crushWidth-lipgloss.Width(charm)-lipgloss.Width(version))
+	gap := max(0, hyperWidth-lipgloss.Width(charm)-lipgloss.Width(version))
 	metaRow := fg(o.CharmColor, charm) + strings.Repeat(" ", gap) + fg(o.VersionColor, version)
 
-	// Join the meta row and big Crush title.
-	crush = strings.TrimSpace(metaRow + "\n" + crush)
+	// Join the meta row and big Hyper title.
+	hyper = strings.TrimSpace(metaRow + "\n" + hyper)
 
-	// Narrow version. If this is Hypercrush, this is also a stacked version.
+	// Narrow version. If this is full Hyper, this is also a stacked version.
 	if compact {
-		field := fg(o.FieldColor, strings.Repeat(diag, crushWidth))
-		return strings.Join([]string{field, field, crush, field, ""}, "\n")
+		field := fg(o.FieldColor, strings.Repeat(diag, hyperWidth))
+		return strings.Join([]string{field, field, hyper, field, ""}, "\n")
 	}
 
-	fieldHeight := lipgloss.Height(crush)
+	fieldHeight := lipgloss.Height(hyper)
 
 	// Left field.
 	const leftWidth = 6
@@ -121,7 +100,7 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	}
 
 	// Right field.
-	rightWidth := max(15, o.Width-crushWidth-leftWidth-2) // 2 for the gap.
+	rightWidth := max(15, o.Width-hyperWidth-leftWidth-2) // 2 for the gap.
 	const stepDownAt = 0
 	rightField := new(strings.Builder)
 	for i := range fieldHeight {
@@ -134,7 +113,7 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 
 	// Return the wide version.
 	const hGap = " "
-	logo := lipgloss.JoinHorizontal(lipgloss.Top, leftField.String(), hGap, crush, hGap, rightField.String())
+	logo := lipgloss.JoinHorizontal(lipgloss.Top, leftField.String(), hGap, hyper, hGap, rightField.String())
 	if o.Width > 0 {
 		// Truncate the logo to the specified width.
 		lines := strings.Split(logo, "\n")
@@ -146,17 +125,14 @@ func Render(base lipgloss.Style, version string, compact bool, o Opts) string {
 	return logo
 }
 
-// SmallRender renders a smaller version of the Crush logo, suitable for
+// SmallRender renders a smaller version of the Hyper logo, suitable for
 // smaller windows or sidebar usage.
 func SmallRender(t *styles.Styles, width int, o Opts) string {
-	name := "Crush"
+	name := "Hyper"
 	if o.Hyper {
-		name = "HYPERCRUSH"
+		name = "HYPER"
 	}
 	charm := "Charm™"
-	if !o.Hyper {
-		charm = " " + charm
-	}
 	title := t.Logo.SmallCharm.Render(charm)
 	title = fmt.Sprintf("%s %s", title, styles.ApplyBoldForegroundGrad(t.Logo.GradCanvas, name, t.Logo.SmallGradFromColor, t.Logo.SmallGradToColor))
 	remainingWidth := width - lipgloss.Width(title) - 1 // 1 for the space after the name

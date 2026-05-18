@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"image/color"
 	"io"
 	"log/slog"
 	"os"
@@ -18,29 +19,28 @@ import (
 	"charm.land/catwalk/pkg/catwalk"
 	"charm.land/fantasy"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/agent"
-	"github.com/charmbracelet/crush/internal/agent/notify"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/event"
-	"github.com/charmbracelet/crush/internal/filetracker"
-	"github.com/charmbracelet/crush/internal/format"
-	"github.com/charmbracelet/crush/internal/history"
-	"github.com/charmbracelet/crush/internal/log"
-	"github.com/charmbracelet/crush/internal/lsp"
-	"github.com/charmbracelet/crush/internal/message"
-	"github.com/charmbracelet/crush/internal/permission"
-	"github.com/charmbracelet/crush/internal/pubsub"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/shell"
-	"github.com/charmbracelet/crush/internal/skills"
-	"github.com/charmbracelet/crush/internal/ui/anim"
-	"github.com/charmbracelet/crush/internal/ui/styles"
-	"github.com/charmbracelet/crush/internal/update"
-	"github.com/charmbracelet/crush/internal/version"
+	"github.com/charmbracelet/hyper/internal/agent"
+	"github.com/charmbracelet/hyper/internal/agent/notify"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/db"
+	"github.com/charmbracelet/hyper/internal/event"
+	"github.com/charmbracelet/hyper/internal/filetracker"
+	"github.com/charmbracelet/hyper/internal/format"
+	"github.com/charmbracelet/hyper/internal/history"
+	"github.com/charmbracelet/hyper/internal/log"
+	"github.com/charmbracelet/hyper/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/message"
+	"github.com/charmbracelet/hyper/internal/permission"
+	"github.com/charmbracelet/hyper/internal/pubsub"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/shell"
+	"github.com/charmbracelet/hyper/internal/skills"
+	"github.com/charmbracelet/hyper/internal/ui/anim"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/update"
+	"github.com/charmbracelet/hyper/internal/version"
 	"github.com/charmbracelet/x/ansi"
-	"github.com/charmbracelet/x/exp/charmtone"
 	"github.com/charmbracelet/x/term"
 )
 
@@ -241,7 +241,7 @@ func (app *App) RunNonInteractive(ctx context.Context, output io.Writer, prompt,
 		if f, ok := output.(*os.File); ok && stdinTTY && stdoutTTY {
 			hasDarkBG = lipgloss.HasDarkBackground(os.Stdin, f)
 		}
-		defaultFG := lipgloss.LightDark(hasDarkBG)(charmtone.Pepper, t.WorkingLabelColor)
+		defaultFG := lipgloss.LightDark(hasDarkBG)(color.RGBA{R: 245, G: 244, B: 237, A: 255}, t.WorkingLabelColor)
 
 		spinner = format.NewSpinner(ctx, cancel, anim.Settings{
 			Size:        10,

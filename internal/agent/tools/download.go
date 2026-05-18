@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 type DownloadParams struct {
@@ -87,7 +87,8 @@ func NewDownloadTool(permissions permission.Service, workingDir string, client *
 				return fantasy.ToolResponse{}, fmt.Errorf("session ID is required for downloading files")
 			}
 
-			p, err := permissions.Request(ctx,
+			p, err := permissions.Request(
+				ctx,
 				permission.CreatePermissionRequest{
 					SessionID:   sessionID,
 					Path:        filePath,
@@ -121,7 +122,7 @@ func NewDownloadTool(permissions permission.Service, workingDir string, client *
 				return fantasy.ToolResponse{}, fmt.Errorf("failed to create request: %w", err)
 			}
 
-			req.Header.Set("User-Agent", "crush/1.0")
+			req.Header.Set("User-Agent", "hyper/1.0")
 
 			resp, err := client.Do(req)
 			if err != nil {
@@ -160,5 +161,6 @@ func NewDownloadTool(permissions permission.Service, workingDir string, client *
 			}
 
 			return fantasy.NewTextResponse(responseMsg), nil
-		})
+		},
+	)
 }

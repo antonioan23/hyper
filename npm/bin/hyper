@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+"use strict";
+
+const { execFileSync } = require("child_process");
+const { join } = require("path");
+const { existsSync } = require("fs");
+
+const binDir = __dirname;
+const isWindows = process.platform === "win32";
+const nativeName = isWindows ? "hyper.exe" : "hyper";
+const nativePath = join(binDir, "native", nativeName);
+
+if (!existsSync(nativePath)) {
+  console.error("Hyper binary not found. Please reinstall @hostclube/hyper:");
+  console.error("  npm install -g @hostclube/hyper");
+  process.exit(1);
+}
+
+const args = process.argv.slice(2);
+
+try {
+  const result = execFileSync(nativePath, args, {
+    stdio: "inherit",
+    windowsHide: false,
+  });
+  if (typeof result === "number") process.exit(result);
+} catch (err) {
+  if (err.status !== undefined) {
+    process.exit(err.status);
+  }
+  // Signal killed or other error
+  process.exit(1);
+}

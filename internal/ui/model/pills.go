@@ -6,9 +6,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/charmbracelet/crush/internal/session"
-	"github.com/charmbracelet/crush/internal/ui/chat"
-	"github.com/charmbracelet/crush/internal/ui/styles"
+	"github.com/charmbracelet/hyper/internal/session"
+	"github.com/charmbracelet/hyper/internal/ui/chat"
+	"github.com/charmbracelet/hyper/internal/ui/styles"
 )
 
 // pillStyle returns the appropriate style for a pill based on focus state.

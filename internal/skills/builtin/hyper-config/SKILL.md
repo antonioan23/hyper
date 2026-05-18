@@ -1,21 +1,21 @@
 ---
-name: crush-config
-description: Use when the user needs help configuring Crush — working with crush.json, setting up providers, configuring LSPs, adding MCP servers, managing skills or permissions, or changing Crush behavior.
+name: hyper-config
+description: Use when the user needs help configuring Hyper — working with hyper.json, setting up providers, configuring LSPs, adding MCP servers, managing skills or permissions, or changing Hyper behavior.
 ---
 
-# Crush Configuration
+# Hyper Configuration
 
-Crush uses JSON configuration files with the following priority (highest to lowest):
+Hyper uses JSON configuration files with the following priority (highest to lowest):
 
-1. `.crush.json` (project-local, hidden)
-2. `crush.json` (project-local)
-3. `$XDG_CONFIG_HOME/crush/crush.json` or `$HOME/.config/crush/crush.json` (global)
+1. `.hyper.json` (project-local, hidden)
+2. `hyper.json` (project-local)
+3. `$XDG_CONFIG_HOME/hyper/hyper.json` or `$HOME/.config/hyper/hyper.json` (global)
 
 ## Basic Structure
 
 ```json
 {
-  "$schema": "https://charm.land/crush.json",
+  "$schema": "https://charm.land/hyper.json",
   "models": {},
   "providers": {},
   "mcp": {},
@@ -31,7 +31,7 @@ The `$schema` property enables IDE autocomplete but is optional.
 
 ## Shell Expansion
 
-Crush runs selected string fields through an embedded bash-compatible
+Hyper runs selected string fields through an embedded bash-compatible
 shell at load time, so values can pull from env vars, files, or helper
 commands.
 
@@ -76,9 +76,9 @@ var isn't set. Applies to MCP `headers` and provider `extra_headers`.
 
 ### Security note
 
-`crush.json` is trusted code. Any `$(...)` in it runs at load time
+`hyper.json` is trusted code. Any `$(...)` in it runs at load time
 with the invoking user's shell privileges, before the UI appears.
-Don't launch Crush in a directory whose `crush.json` you haven't
+Don't launch Hyper in a directory whose `hyper.json` you haven't
 reviewed.
 
 ## Common Tasks
@@ -188,7 +188,7 @@ reviewed.
   "options": {
     "skills_paths": ["./skills"],
     "disabled_tools": ["bash", "sourcegraph"],
-    "disabled_skills": ["crush-config"],
+    "disabled_skills": ["hyper-config"],
     "tui": {
       "compact_mode": false,
       "diff_mode": "unified",
@@ -207,7 +207,7 @@ reviewed.
 
 > [!IMPORTANT]
 > The following skill paths are loaded by default and DO NOT NEED to be added to `skills_paths`:
-> `.agents/skills`, `.crush/skills`, `.claude/skills`, `.cursor/skills`
+> `.agents/skills`, `.hyper/skills`, `.claude/skills`, `.cursor/skills`
 
 Other options: `context_paths`, `progress`, `disable_notifications`, `disable_auto_summarize`, `disable_metrics`, `disable_provider_auto_update`, `disable_default_providers`, `data_directory`, `initialize_as`.
 
@@ -221,11 +221,11 @@ Hooks are user-defined shell commands that fire on agent events. Currently only 
     "PreToolUse": [
       {
         "matcher": "^(edit|write|multiedit)$",
-        "command": ".crush/hooks/protect-files.sh"
+        "command": ".hyper/hooks/protect-files.sh"
       },
       {
         "matcher": "^bash$",
-        "command": ".crush/hooks/no-haskell.sh"
+        "command": ".hyper/hooks/no-haskell.sh"
       }
     ]
   }
@@ -266,13 +266,13 @@ A JSON payload is piped to the hook command:
 
 | Variable | Description |
 |---|---|
-| `CRUSH_EVENT` | Event name (e.g. `PreToolUse`) |
-| `CRUSH_TOOL_NAME` | Name of the tool being called |
-| `CRUSH_SESSION_ID` | Current session ID |
-| `CRUSH_CWD` | Current working directory |
-| `CRUSH_PROJECT_DIR` | Project root directory |
-| `CRUSH_TOOL_INPUT_COMMAND` | Value of `command` from tool input (if present) |
-| `CRUSH_TOOL_INPUT_FILE_PATH` | Value of `file_path` from tool input (if present) |
+| `HYPER_EVENT` | Event name (e.g. `PreToolUse`) |
+| `HYPER_TOOL_NAME` | Name of the tool being called |
+| `HYPER_SESSION_ID` | Current session ID |
+| `HYPER_CWD` | Current working directory |
+| `HYPER_PROJECT_DIR` | Project root directory |
+| `HYPER_TOOL_INPUT_COMMAND` | Value of `command` from tool input (if present) |
+| `HYPER_TOOL_INPUT_FILE_PATH` | Value of `file_path` from tool input (if present) |
 
 ### Hook Output
 
@@ -298,7 +298,7 @@ exit 2
 
 ### Claude Code Compatibility
 
-Crush also supports the Claude Code hook output format:
+Hyper also supports the Claude Code hook output format:
 
 ```json
 {
@@ -334,6 +334,6 @@ When multiple hooks match, their decisions are aggregated:
 
 ## Environment Variables
 
-- `CRUSH_GLOBAL_CONFIG` - Override global config location
-- `CRUSH_GLOBAL_DATA` - Override data directory location
-- `CRUSH_SKILLS_DIR` - Override default skills directory
+- `HYPER_GLOBAL_CONFIG` - Override global config location
+- `HYPER_GLOBAL_DATA` - Override data directory location
+- `HYPER_SKILLS_DIR` - Override default skills directory

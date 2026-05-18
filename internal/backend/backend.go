@@ -10,13 +10,13 @@ import (
 	"log/slog"
 	"runtime"
 
-	"github.com/charmbracelet/crush/internal/app"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/csync"
-	"github.com/charmbracelet/crush/internal/db"
-	"github.com/charmbracelet/crush/internal/proto"
-	"github.com/charmbracelet/crush/internal/ui/util"
-	"github.com/charmbracelet/crush/internal/version"
+	"github.com/charmbracelet/hyper/internal/app"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/csync"
+	"github.com/charmbracelet/hyper/internal/db"
+	"github.com/charmbracelet/hyper/internal/proto"
+	"github.com/charmbracelet/hyper/internal/ui/util"
+	"github.com/charmbracelet/hyper/internal/version"
 	"github.com/google/uuid"
 )
 
@@ -34,7 +34,7 @@ var (
 // shutdown (e.g. when the last workspace is removed).
 type ShutdownFunc func()
 
-// Backend provides transport-agnostic business logic for the Crush
+// Backend provides transport-agnostic business logic for the Hyper
 // server. It manages workspaces and delegates to [app.App] services.
 type Backend struct {
 	workspaces *csync.Map[string, *Workspace]
@@ -97,7 +97,7 @@ func (b *Backend) CreateWorkspace(args proto.Workspace) (*Workspace, proto.Works
 
 	cfg.Overrides().SkipPermissionRequests = args.YOLO
 
-	if err := createDotCrushDir(cfg.Config().Options.DataDirectory); err != nil {
+	if err := createDotHyperDir(cfg.Config().Options.DataDirectory); err != nil {
 		return nil, proto.Workspace{}, fmt.Errorf("failed to create data directory: %w", err)
 	}
 
@@ -122,7 +122,8 @@ func (b *Backend) CreateWorkspace(args proto.Workspace) (*Workspace, proto.Works
 	b.workspaces.Set(id, ws)
 
 	if args.Version != "" && args.Version != version.Version {
-		slog.Warn("Client/server version mismatch",
+		slog.Warn(
+			"Client/server version mismatch",
 			"client", args.Version,
 			"server", version.Version,
 		)

@@ -11,10 +11,10 @@ import (
 	"strings"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/filepathext"
-	"github.com/charmbracelet/crush/internal/fsext"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/filepathext"
+	"github.com/charmbracelet/hyper/internal/fsext"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 type LSParams struct {
@@ -102,7 +102,8 @@ func NewLsTool(permissions permission.Service, workingDir string, lsConfig confi
 					return fantasy.ToolResponse{}, fmt.Errorf("session ID is required for accessing directories outside working directory")
 				}
 
-				granted, err := permissions.Request(ctx,
+				granted, err := permissions.Request(
+					ctx,
 					permission.CreatePermissionRequest{
 						SessionID:   sessionID,
 						Path:        absSearchPath,
@@ -130,7 +131,8 @@ func NewLsTool(permissions permission.Service, workingDir string, lsConfig confi
 				fantasy.NewTextResponse(output),
 				metadata,
 			), nil
-		})
+		},
+	)
 }
 
 func ListDirectoryTree(searchPath string, params LSParams, lsConfig config.ToolLs) (string, LSResponseMetadata, error) {

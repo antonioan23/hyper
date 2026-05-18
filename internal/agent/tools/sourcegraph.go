@@ -118,7 +118,7 @@ func NewSourcegraphTool(client *http.Client) fantasy.AgentTool {
 			}
 
 			req.Header.Set("Content-Type", "application/json")
-			req.Header.Set("User-Agent", "crush/1.0")
+			req.Header.Set("User-Agent", "hyper/1.0")
 
 			resp, err := client.Do(req)
 			if err != nil {
@@ -150,7 +150,8 @@ func NewSourcegraphTool(client *http.Client) fantasy.AgentTool {
 			}
 
 			return fantasy.NewTextResponse(formattedResults), nil
-		})
+		},
+	)
 }
 
 func formatSourcegraphResults(result map[string]any, contextWindow int) (string, error) {

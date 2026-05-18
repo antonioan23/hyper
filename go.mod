@@ -1,4 +1,4 @@
-module github.com/charmbracelet/crush
+module github.com/charmbracelet/hyper
 
 go 1.26.3
 

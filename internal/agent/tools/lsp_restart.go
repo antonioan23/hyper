@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/lsp"
+	"github.com/charmbracelet/hyper/internal/lsp"
 )
 
 const LSPRestartToolName = "lsp_restart"
@@ -75,5 +75,6 @@ func NewLSPRestartTool(lspManager *lsp.Manager) fantasy.AgentTool {
 			}
 
 			return fantasy.NewTextResponse(output), nil
-		})
+		},
+	)
 }

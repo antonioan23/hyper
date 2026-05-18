@@ -6,9 +6,9 @@ import (
 	"slices"
 
 	"charm.land/fantasy"
-	"github.com/charmbracelet/crush/internal/agent/tools/mcp"
-	"github.com/charmbracelet/crush/internal/config"
-	"github.com/charmbracelet/crush/internal/permission"
+	"github.com/charmbracelet/hyper/internal/agent/tools/mcp"
+	"github.com/charmbracelet/hyper/internal/config"
+	"github.com/charmbracelet/hyper/internal/permission"
 )
 
 // whitelistDockerTools contains Docker MCP tools that don't require permission.
@@ -105,7 +105,8 @@ func (m *Tool) Run(ctx context.Context, params fantasy.ToolCall) (fantasy.ToolRe
 	// Skip permission for whitelisted Docker MCP tools.
 	if !slices.Contains(whitelistDockerTools, params.Name) {
 		permissionDescription := fmt.Sprintf("execute %s with the following parameters:", m.Info().Name)
-		p, err := m.permissions.Request(ctx,
+		p, err := m.permissions.Request(
+			ctx,
 			permission.CreatePermissionRequest{
 				SessionID:   sessionID,
 				ToolCallID:  params.ID,
