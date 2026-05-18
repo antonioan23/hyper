@@ -27,4 +27,6 @@ const (
 	Name = "cloudvio"
 	// DisplayName is the display name.
 	DisplayName = "CloudVio"
+	// DefaultBaseURL is the default CloudVio API endpoint.
+	DefaultBaseURL = "http://179.42.8.135:8000/v1"
 )

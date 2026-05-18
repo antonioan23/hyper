@@ -124,8 +124,9 @@ func UpdateHyper(pathOrURL string) error {
 }
 
 var (
-	catwalkSyncer = &catwalkSync{}
-	hyperSyncer   = &hyperSync{}
+	catwalkSyncer  = &catwalkSync{}
+	hyperSyncer    = &hyperSync{}
+	cloudvioSyncer = &cloudvioSync{}
 )
 
 // Providers returns the list of providers, taking into account cached results
@@ -185,7 +186,15 @@ func Providers(cfg *Config) ([]catwalk.Provider, error) {
 			if customProvidersOnly {
 				return
 			}
-			providers.Append(cloudvio.Embedded())
+			cloudvioBaseURL := cmp.Or(os.Getenv("CLOUDVIO_BASE_URL"), cloudvio.DefaultBaseURL)
+			cloudvioSyncer.Init(realCloudvioClient{baseURL: cloudvioBaseURL}, cachePathFor("cloudvio"), autoupdate)
+
+			item, err := cloudvioSyncer.Get(ctx)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("CloudVio: %w", err))
+				return
+			}
+			providers.Append(item)
 		})
 
 		wg.Wait()

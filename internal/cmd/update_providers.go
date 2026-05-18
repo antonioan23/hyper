@@ -34,6 +34,12 @@ hyper update-providers --source=hyper
 
 # Update Hyper from a custom URL
 hyper update-providers --source=hyper https://hyper.example.com
+
+# Update CloudVio provider information
+hyper update-providers --source=cloudvio
+
+# Update CloudVio from a custom URL
+hyper update-providers --source=cloudvio https://cloudvio.example.com
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// NOTE(@andreynering): We want to skip logging output do stdout here.
@@ -50,8 +56,10 @@ hyper update-providers --source=hyper https://hyper.example.com
 			err = config.UpdateProviders(pathOrURL)
 		case "hyper":
 			err = config.UpdateHyper(pathOrURL)
+		case "cloudvio":
+			err = config.UpdateCloudVio(pathOrURL)
 		default:
-			return fmt.Errorf("invalid source %q, must be 'catwalk' or 'hyper'", updateProvidersSource)
+			return fmt.Errorf("invalid source %q, must be 'catwalk', 'hyper', or 'cloudvio'", updateProvidersSource)
 		}
 
 		if err != nil {
@@ -78,5 +86,5 @@ hyper update-providers --source=hyper https://hyper.example.com
 }
 
 func init() {
-	updateProvidersCmd.Flags().StringVar(&updateProvidersSource, "source", "catwalk", "Provider source to update (catwalk or hyper)")
+	updateProvidersCmd.Flags().StringVar(&updateProvidersSource, "source", "catwalk", "Provider source to update (catwalk, hyper, or cloudvio)")
 }
