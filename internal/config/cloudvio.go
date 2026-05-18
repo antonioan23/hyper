@@ -12,10 +12,13 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"charm.land/catwalk/pkg/catwalk"
 	"github.com/charmbracelet/hyper/internal/agent/cloudvio"
 )
+
+var cloudvioHTTPClient = &http.Client{Timeout: 30 * time.Second}
 
 type cloudvioClient interface {
 	GetModels(context.Context) ([]openaiModel, error)
@@ -33,12 +36,14 @@ type cloudvioSync struct {
 	result     catwalk.Provider
 	cache      cache[catwalk.Provider]
 	client     cloudvioClient
+	baseURL    string
 	autoupdate bool
 	init       atomic.Bool
 }
 
-func (s *cloudvioSync) Init(client cloudvioClient, path string, autoupdate bool) {
+func (s *cloudvioSync) Init(client cloudvioClient, baseURL, path string, autoupdate bool) {
 	s.client = client
+	s.baseURL = baseURL
 	s.cache = newCache[catwalk.Provider](path)
 	s.autoupdate = autoupdate
 	s.init.Store(true)
@@ -80,7 +85,7 @@ func (s *cloudvioSync) Get(ctx context.Context) (catwalk.Provider, error) {
 			return
 		}
 
-		provider := transformCloudvioModels(result, cached, etag)
+		provider := transformCloudvioModels(result, cached, s.baseURL, etag)
 		s.result = provider
 		throwErr = s.cache.Store(provider)
 	})
@@ -89,7 +94,7 @@ func (s *cloudvioSync) Get(ctx context.Context) (catwalk.Provider, error) {
 
 // transformCloudvioModels converts an OpenAI /v1/models response into a
 // catwalk.Provider, preserving metadata from the cached provider when available.
-func transformCloudvioModels(models []openaiModel, cached catwalk.Provider, etag string) catwalk.Provider {
+func transformCloudvioModels(models []openaiModel, cached catwalk.Provider, baseURL, etag string) catwalk.Provider {
 	embeddedMap := make(map[string]catwalk.Model, len(cached.Models))
 	for _, m := range cached.Models {
 		embeddedMap[m.ID] = m
@@ -109,11 +114,16 @@ func transformCloudvioModels(models []openaiModel, cached catwalk.Provider, etag
 		}
 	}
 
+	apiEndpoint := baseURL + "/v1"
+	if apiEndpoint == "/v1" {
+		apiEndpoint = cloudvio.DefaultBaseURL + "/v1"
+	}
+
 	return catwalk.Provider{
 		ID:                  cloudvio.Name,
 		Name:                cloudvio.DisplayName,
 		Type:                "openai-compat",
-		APIEndpoint:         cloudvio.DefaultBaseURL,
+		APIEndpoint:         apiEndpoint,
 		DefaultLargeModelID: cached.DefaultLargeModelID,
 		DefaultSmallModelID: cached.DefaultSmallModelID,
 		Models:              result,
@@ -131,7 +141,7 @@ func (c realCloudvioClient) GetModels(ctx context.Context) ([]openaiModel, error
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := cloudvioHTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -166,6 +176,7 @@ func UpdateCloudVio(pathOrURL string) error {
 	switch {
 	case pathOrURL == "" || pathOrURL == "embedded":
 		provider = cloudvio.Embedded()
+		provider.APIEndpoint = cloudvio.DefaultBaseURL + "/v1"
 	case strings.HasPrefix(pathOrURL, "http://") || strings.HasPrefix(pathOrURL, "https://"):
 		client := realCloudvioClient{baseURL: pathOrURL}
 		models, err := client.GetModels(context.Background())
@@ -173,7 +184,7 @@ func UpdateCloudVio(pathOrURL string) error {
 			return fmt.Errorf("failed to fetch models from CloudVio: %w", err)
 		}
 		embedded := cloudvio.Embedded()
-		provider = transformCloudvioModels(models, embedded, "")
+		provider = transformCloudvioModels(models, embedded, pathOrURL, "")
 	default:
 		content, err := os.ReadFile(pathOrURL)
 		if err != nil {

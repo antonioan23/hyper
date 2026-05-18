@@ -187,7 +187,7 @@ func Providers(cfg *Config) ([]catwalk.Provider, error) {
 				return
 			}
 			cloudvioBaseURL := cmp.Or(os.Getenv("CLOUDVIO_BASE_URL"), cloudvio.DefaultBaseURL)
-			cloudvioSyncer.Init(realCloudvioClient{baseURL: cloudvioBaseURL}, cachePathFor("cloudvio"), autoupdate)
+			cloudvioSyncer.Init(realCloudvioClient{baseURL: cloudvioBaseURL}, cloudvioBaseURL, cachePathFor("cloudvio"), autoupdate)
 
 			item, err := cloudvioSyncer.Get(ctx)
 			if err != nil {
