@@ -585,6 +585,9 @@ func (c *Config) defaultModelSelection(knownProviders []catwalk.Provider) (large
 		if !ok || providerConfig.Disable {
 			continue
 		}
+		if p.DefaultLargeModelID == "" || p.DefaultSmallModelID == "" {
+			continue
+		}
 		defaultLargeModel := c.GetModel(string(p.ID), p.DefaultLargeModelID)
 		if defaultLargeModel == nil {
 			err = fmt.Errorf("default large model %s not found for provider %s", p.DefaultLargeModelID, p.ID)

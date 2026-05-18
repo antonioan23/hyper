@@ -119,13 +119,24 @@ func transformCloudvioModels(models []openaiModel, cached catwalk.Provider, base
 		apiEndpoint = cloudvio.DefaultBaseURL + "/v1"
 	}
 
+	largeID := cached.DefaultLargeModelID
+	smallID := cached.DefaultSmallModelID
+	if largeID == "" && len(result) > 0 {
+		largeID = result[0].ID
+	}
+	if smallID == "" && len(result) > 1 {
+		smallID = result[1].ID
+	} else if smallID == "" && len(result) > 0 {
+		smallID = result[0].ID
+	}
+
 	return catwalk.Provider{
 		ID:                  cloudvio.Name,
 		Name:                cloudvio.DisplayName,
 		Type:                "openai-compat",
 		APIEndpoint:         apiEndpoint,
-		DefaultLargeModelID: cached.DefaultLargeModelID,
-		DefaultSmallModelID: cached.DefaultSmallModelID,
+		DefaultLargeModelID: largeID,
+		DefaultSmallModelID: smallID,
 		Models:              result,
 		DefaultHeaders:      map[string]string{"X-CloudVio-ETag": etag},
 	}
