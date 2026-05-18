@@ -1,10 +1,10 @@
 {
   "name": "@hostclube/hyper-win32-x64",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Hyper native binary for win32-x64",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/charmbracelet/hyper.git",
+    "url": "git+https://github.com/antonioan23/hyper.git",
     "directory": "npm/platforms/hyper-win32-x64"
   },
   "license": "MIT",
