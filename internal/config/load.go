@@ -30,9 +30,48 @@ import (
 
 const defaultCatwalkURL = "https://catwalk.charm.land"
 
+// migrateHyperProviderCache detects a provider cache file that was
+// written to the global config data path (same path as GlobalConfigData)
+// and moves it to the correct cache location. This resolves a path
+// collision where cachePathFor("hyper") == GlobalConfigData().
+func migrateHyperProviderCache() {
+	globalDataPath := GlobalConfigData()
+	data, err := os.ReadFile(globalDataPath)
+	if err != nil {
+		return // No file or unreadable — nothing to migrate.
+	}
+
+	// Check if the file looks like a provider cache (has "models" as an
+	// array at the root level) rather than a proper config (which has
+	// "models" as an object mapping role to selection).
+	var probe struct {
+		Models json.RawMessage `json:"models"`
+	}
+	if err := json.Unmarshal(data, &probe); err != nil || len(probe.Models) == 0 {
+		return
+	}
+	// If models starts with '[', it's an array — provider cache format.
+	if probe.Models[0] != '[' {
+		return
+	}
+
+	newPath := cachePathFor("hyper-provider")
+	if err := os.MkdirAll(filepath.Dir(newPath), 0o755); err != nil {
+		slog.Warn("Failed to migrate Hyper provider cache", "error", err)
+		return
+	}
+	if err := os.Rename(globalDataPath, newPath); err != nil {
+		slog.Warn("Failed to move Hyper provider cache to new path", "from", globalDataPath, "to", newPath, "error", err)
+		return
+	}
+	slog.Info("Migrated Hyper provider cache to avoid config collision", "from", globalDataPath, "to", newPath)
+}
+
 // Load loads the configuration from the default paths and returns a
 // ConfigStore that owns both the pure-data Config and all runtime state.
 func Load(workingDir, dataDir string, debug bool) (*ConfigStore, error) {
+	migrateHyperProviderCache()
+
 	configPaths := lookupConfigs(workingDir)
 
 	cfg, loadedPaths, err := loadFromConfigPaths(configPaths)

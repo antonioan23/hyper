@@ -170,7 +170,7 @@ func Providers(cfg *Config) ([]catwalk.Provider, error) {
 			if customProvidersOnly {
 				return
 			}
-			path := cachePathFor("hyper")
+			path := cachePathFor("hyper-provider")
 			hyperSyncer.Init(realHyperClient{baseURL: hyper.BaseURL()}, path, autoupdate)
 
 			item, err := hyperSyncer.Get(ctx)
