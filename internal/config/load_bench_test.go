@@ -13,7 +13,8 @@ func BenchmarkLoadFromConfigPaths(b *testing.B) {
 	globalConfig := filepath.Join(tmpDir, "global.json")
 	localConfig := filepath.Join(tmpDir, "local.json")
 
-	globalContent := []byte(`{
+	globalContent := []byte(
+		`{
 		"providers": {
 			"openai": {
 				"api_key": "$OPENAI_API_KEY",
@@ -31,7 +32,8 @@ func BenchmarkLoadFromConfigPaths(b *testing.B) {
 		}
 	}`)
 
-	localContent := []byte(`{
+	localContent := []byte(
+		`{
 		"providers": {
 			"openai": {
 				"api_key": "sk-override-key"

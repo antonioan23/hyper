@@ -1,6 +1,6 @@
 {
   "name": "@hostclube/hyper",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Hyper - AI coding assistant for the terminal",
   "repository": {
     "type": "git",
@@ -32,10 +32,10 @@
     "postinstall.js"
   ],
   "optionalDependencies": {
-    "@hostclube/hyper-win32-x64": "0.1.9",
-    "@hostclube/hyper-darwin-arm64": "0.1.9",
-    "@hostclube/hyper-darwin-x64": "0.1.9",
-    "@hostclube/hyper-linux-x64": "0.1.9",
-    "@hostclube/hyper-linux-arm64": "0.1.9"
+    "@hostclube/hyper-win32-x64": "0.2.0",
+    "@hostclube/hyper-darwin-arm64": "0.2.0",
+    "@hostclube/hyper-darwin-x64": "0.2.0",
+    "@hostclube/hyper-linux-x64": "0.2.0",
+    "@hostclube/hyper-linux-arm64": "0.2.0"
   }
 }

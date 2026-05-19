@@ -1,6 +1,6 @@
 {
   "name": "@hostclube/hyper-win32-x64",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Hyper native binary for win32-x64",
   "repository": {
     "type": "git",

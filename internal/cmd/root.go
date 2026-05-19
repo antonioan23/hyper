@@ -143,7 +143,8 @@ hyper --continue
 	},
 }
 
-var heartbit = lipgloss.NewStyle().Foreground(color.RGBA{R: 217, G: 119, B: 87, A: 255}).SetString(`
+var heartbit = lipgloss.NewStyle().Foreground(color.RGBA{R: 217, G: 119, B: 87, A: 255}).SetString(
+	`
     ▄▄▄▄▄▄▄▄    ▄▄▄▄▄▄▄▄
   ███████████  ███████████
 ████████████████████████████

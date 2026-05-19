@@ -41,11 +41,13 @@ func LetterC(stretch bool) string {
 	// █
 	//	▀▀▀▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
 		▄
 		█
 	`)
-	right := heredoc.Doc(`
+	right := heredoc.Doc(
+		`
 		▀
 
 		▀
@@ -73,12 +75,14 @@ func LetterE(stretch bool) string {
 	// █▀▀▀▀
 	// ▀▀▀▀▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
        █
        █
        ▀
 	`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
        ▀
        ▀
        ▀
@@ -106,12 +110,14 @@ func LetterEAlt(stretch bool) string {
 	// █ ▀▀▀
 	// ▀▀▀▀▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
        █▀
        █
        ▀▀
 	`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
        ▀
        ▀
        ▀
@@ -141,7 +147,8 @@ func LetterH(stretch bool) string {
 		█
 		█
 		▀`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
 
 		▀
 	`)
@@ -167,16 +174,19 @@ func LetterP(stretch bool) string {
 	// █▀▀▀
 	// ▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
 		█
 		█
 		▀
 	`)
-	center := heredoc.Doc(`
+	center := heredoc.Doc(
+		`
 		▀
 		▀
 	`)
-	right := heredoc.Doc(`
+	right := heredoc.Doc(
+		`
 		▄
 
 
@@ -203,16 +213,19 @@ func LetterR(stretch bool) string {
 	// █▀▀▀▄
 	// ▀   ▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
 		█
 		█
 		▀
 	`)
-	center := heredoc.Doc(`
+	center := heredoc.Doc(
+		`
 		▀
 		▀
 	`)
-	right := heredoc.Doc(`
+	right := heredoc.Doc(
+		`
 		▄
 		▄
 		▀
@@ -241,17 +254,20 @@ func LetterSAlt(stretch bool) string {
 	// ▀▀▀▀▀█
 	// ▀▀▀▀▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
 		▄
 		▀
 		▀
 	`)
-	center := heredoc.Doc(`
+	center := heredoc.Doc(
+		`
 		▀
 		▀
 		▀
 	`)
-	right := heredoc.Doc(`
+	right := heredoc.Doc(
+		`
 		▀
 		█
 	`)
@@ -277,11 +293,13 @@ func LetterU(stretch bool) string {
 	// █   █
 	//	▀▀▀
 
-	side := heredoc.Doc(`
+	side := heredoc.Doc(
+		`
 		█
 		█
 	`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
 
 
 		▀
@@ -310,22 +328,26 @@ func LetterY(stretch bool) string {
 	//	▀▄▀
 	//	 ▀
 
-	side := heredoc.Doc(`
+	side := heredoc.Doc(
+		`
 		█
 
 	`)
-	inside := heredoc.Doc(`
+	inside := heredoc.Doc(
+		`
 
 		▀
 
 	`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
 
 		▄
 		▀
 	`)
 	if stretch {
-		middle = heredoc.Doc(`
+		middle = heredoc.Doc(
+			`
 
 			█
 			▀
@@ -360,17 +382,20 @@ func LetterYAlt(stretch bool) string {
 	// ▀▀▀▀█
 	// ▀▀▀▀
 
-	left := heredoc.Doc(`
+	left := heredoc.Doc(
+		`
 		█
 		▀
 		▀
 	`)
-	middle := heredoc.Doc(`
+	middle := heredoc.Doc(
+		`
 
 		▀
 		▀
 	`)
-	right := heredoc.Doc(`
+	right := heredoc.Doc(
+		`
 		█
 		█
 

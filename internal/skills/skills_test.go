@@ -222,7 +222,8 @@ func TestDiscover(t *testing.T) {
 	// Create valid skill 1.
 	skill1Dir := filepath.Join(tmpDir, "skill-one")
 	require.NoError(t, os.MkdirAll(skill1Dir, 0o755))
-	require.NoError(t, os.WriteFile(filepath.Join(skill1Dir, "SKILL.md"), []byte(`---
+	require.NoError(t, os.WriteFile(filepath.Join(skill1Dir, "SKILL.md"), []byte(
+		`---
 name: skill-one
 description: First test skill.
 ---
@@ -232,7 +233,8 @@ description: First test skill.
 	// Create valid skill 2 in nested directory.
 	skill2Dir := filepath.Join(tmpDir, "nested", "skill-two")
 	require.NoError(t, os.MkdirAll(skill2Dir, 0o755))
-	require.NoError(t, os.WriteFile(filepath.Join(skill2Dir, "SKILL.md"), []byte(`---
+	require.NoError(t, os.WriteFile(filepath.Join(skill2Dir, "SKILL.md"), []byte(
+		`---
 name: skill-two
 description: Second test skill.
 ---
@@ -242,7 +244,8 @@ description: Second test skill.
 	// Create invalid skill (won't be included).
 	invalidDir := filepath.Join(tmpDir, "invalid-dir")
 	require.NoError(t, os.MkdirAll(invalidDir, 0o755))
-	require.NoError(t, os.WriteFile(filepath.Join(invalidDir, "SKILL.md"), []byte(`---
+	require.NoError(t, os.WriteFile(filepath.Join(invalidDir, "SKILL.md"), []byte(
+		`---
 name: wrong-name
 description: Name doesn't match directory.
 ---
@@ -361,7 +364,8 @@ func TestToPromptXMLBuiltinType(t *testing.T) {
 func TestParseContent(t *testing.T) {
 	t.Parallel()
 
-	content := []byte(`---
+	content := []byte(
+		`---
 name: my-skill
 description: A test skill.
 ---
